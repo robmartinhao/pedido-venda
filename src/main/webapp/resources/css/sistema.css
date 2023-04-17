@@ -67,3 +67,8 @@ h1 {
     width: 35px;
     height: 35px;
 }
+
+#tipo td {
+    border: none;
+    padding: 5px;
+}

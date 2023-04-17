@@ -5,14 +5,14 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <ui:define name="titulo">Novo Produto</ui:define>
+    <ui:define name="titulo">Novo Cliente</ui:define>
 
     <ui:define name="corpo">
-        <h1>Novo produto</h1>
+        <h1>Novo cliente</h1>
 
         <p:toolbar style="margin-top: 20px">
             <p:toolbarGroup>
-                <p:button value="Novo" outcome="/produtos/CadastroProduto"/>
+                <p:button value="Novo" outcome="/clientes/CadastroCliente"/>
                 <p:commandButton value="Salvar" id="botaoSalvar"/>
             </p:toolbarGroup>
             <p:toolbarGroup align="right">
@@ -22,27 +22,23 @@
 
         <p:panelGrid columns="2" id="panel" style="width: 100%; margin-top: 20px"
                      columnClasses="rotulo, campo">
-            <p:outputLabel value="SKU" for="sku"/>
-            <p:inputText id="sku" size="20" maxlength="20"/>
 
             <p:outputLabel value="Nome" for="nome"/>
             <p:inputText id="nome" size="60" maxlength="80"/>
 
-            <p:outputLabel value="Categoria" for="categoria"/>
-            <p:selectOneMenu id="categoria">
-                <f:selectItem itemLabel="Selecione a categoria"/>
-            </p:selectOneMenu>
+            <p:outputLabel value="Tipo" for="tipo"/>
+            <h:panelGroup>
+                <p:selectOneRadio id="tipo" value="">
+                    <f:selectItem itemLabel="Física" itemValue="F"/>
+                    <f:selectItem itemLabel="Jurídica" itemValue="J"/>
+                </p:selectOneRadio>
+            </h:panelGroup>
 
-            <p:outputLabel value="Subcategoria" for="subCategoria"/>
-            <p:selectOneMenu id="subCategoria">
-                <f:selectItem itemLabel="Selecione a subcategoria"/>
-            </p:selectOneMenu>
+            <p:outputLabel value="CNPJ" for="cnpj"/>
+            <p:inputMask mask="99.999.999/9999/99" id="cnpj"/>
 
-            <p:outputLabel value="Valor unitário" for="valorUnitario"/>
-            <p:inputText id="valorUnitario" size="10" maxlength="10" styleClass="moeda"/>
-
-            <p:outputLabel value="Estoque" for="estoque"/>
-            <p:inputText id="estoque" size="10" maxlength="4"/>
+            <p:outputLabel value="E-mail" for="email"/>
+            <p:inputText id="email" size="40" maxlength="60"/>
 
         </p:panelGrid>
     </ui:define>
