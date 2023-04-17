@@ -5,14 +5,14 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <ui:define name="titulo">Novo cliente</ui:define>
+    <ui:define name="titulo">Novo usuário</ui:define>
 
     <ui:define name="corpo">
-        <h1>Novo cliente</h1>
+        <h1>Novo usuário</h1>
 
         <p:toolbar style="margin-top: 20px">
             <p:toolbarGroup>
-                <p:button value="Novo" outcome="/clientes/CadastroCliente"/>
+                <p:button value="Novo" outcome="/usuarios/CadastroUsuario"/>
                 <p:commandButton value="Salvar" id="botaoSalvar"/>
             </p:toolbarGroup>
             <p:toolbarGroup align="right">
@@ -24,21 +24,13 @@
                      columnClasses="rotulo, campo">
 
             <p:outputLabel value="Nome" for="nome"/>
-            <p:inputText id="nome" size="60" maxlength="80"/>
-
-            <p:outputLabel value="Tipo" for="tipo"/>
-            <h:panelGroup>
-                <p:selectOneRadio id="tipo" value="">
-                    <f:selectItem itemLabel="Física" itemValue="F"/>
-                    <f:selectItem itemLabel="Jurídica" itemValue="J"/>
-                </p:selectOneRadio>
-            </h:panelGroup>
-
-            <p:outputLabel value="CNPJ" for="cnpj"/>
-            <p:inputMask mask="99.999.999/9999/99" id="cnpj"/>
+            <p:inputText id="nome" size="60" maxlength="60"/>
 
             <p:outputLabel value="E-mail" for="email"/>
-            <p:inputText id="email" size="40" maxlength="60"/>
+            <p:inputText id="email" size="60" maxlength="60"/>
+
+            <p:outputLabel value="Senha" for="senha"/>
+            <p:password id="senha" value=""/>
 
         </p:panelGrid>
     </ui:define>
