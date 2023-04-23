@@ -3,7 +3,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:H="http://java.sun.com/jsf/html">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                >
 
     <ui:define name="titulo">Pesquisa pedidos</ui:define>
 
@@ -16,7 +17,7 @@
                     <p:commandButton value="Pesquisar"/>
                 </p:toolbarGroup>
                 <p:toolbarGroup align="right">
-                    <p:button value="Novo"/>
+                    <p:button value="Novo" outcome="/pedidos/CadastroPedido"/>
                 </p:toolbarGroup>
             </p:toolbar>
 
