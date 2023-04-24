@@ -30,7 +30,7 @@
                 <p:inputText size="60"/>
             </p:panelGrid>
 
-            <p:dataTable id="pedidosTable" value="#{pesquisaClientesBean.clientesFiltrados}" var="cliente"
+            <p:dataTable id="clientesTable" value="#{pesquisaClientesBean.clientesFiltrados}" var="cliente"
                 style="margin-top: 20px" emptyMessage="Nenhum cliente encontrado."
                 rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
                 <p:column headerText="Nome" style="text-align: center; width: 100px">

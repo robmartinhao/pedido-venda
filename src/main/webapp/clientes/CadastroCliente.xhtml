@@ -41,5 +41,34 @@
             <p:inputText id="email" size="40" maxlength="60"/>
 
         </p:panelGrid>
+
+        <p:commandButton style="margin-top: 20px" value="Adicionar endereço"/>
+
+        <p:dataTable id="enderecoTable" value="#{pesquisaClientesBean.clientesFiltrados}" var="endereco"
+                     style="margin-top: 10px" emptyMessage="Nenhum endereço encontrado."
+                     rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+            <p:column headerText="Logradouro" style="text-align: center; width: 100px">
+                <h:outputText value="Rua das Pedras Grandes Azuis"/>
+            </p:column>
+            <p:column headerText="Número">
+                <h:outputText value="1234"/>
+            </p:column>
+            <p:column headerText="Complemento">
+                <h:outputText value="Ap 1022"/>
+            </p:column>
+            <p:column headerText="CEP">
+                <h:outputText value="38499-533"/>
+            </p:column>
+            <p:column headerText="Cidade/UF">
+                <h:outputText value="Uberlândia/MG"/>
+            </p:column>
+
+            <p:column style="text-align: center; width: 50px">
+                <p:button icon="ui-icon-pencil" title="Editar"/>
+                <p:button icon="ui-icon-trash" title="Excluir"/>
+            </p:column>
+        </p:dataTable>
+
+
     </ui:define>
 </ui:composition>
