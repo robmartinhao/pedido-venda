@@ -1,0 +1,53 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                >
+
+    <ui:define name="titulo">Pesquisa de clientes</ui:define>
+
+    <ui:define name="corpo">
+        <form>
+            <h1>Pesquisa de clientes</h1>
+
+            <p:toolbar style="margin-top: 20px">
+                <p:toolbarGroup>
+                    <p:commandButton value="Pesquisar"/>
+                </p:toolbarGroup>
+                <p:toolbarGroup align="right">
+                    <p:button value="Novo" outcome="/clientes/CadastroCliente"/>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:panelGrid columns="2" id="panel" style="width: 100%; margin-top: 20px"
+                         columnClasses="rotulo, campo">
+                <p:outputLabel value="CPF/CNPJ"/>
+                <p:inputText size="20"/>
+
+                <p:outputLabel value="Nome"/>
+                <p:inputText size="60"/>
+            </p:panelGrid>
+
+            <p:dataTable id="pedidosTable" value="#{pesquisaClientesBean.clientesFiltrados}" var="cliente"
+                style="margin-top: 20px" emptyMessage="Nenhum cliente encontrado."
+                rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+                <p:column headerText="Nome" style="text-align: center; width: 100px">
+                    <h:outputText value="Supermercado João das Couves"/>
+                </p:column>
+                <p:column headerText="Tipo">
+                    <h:outputText value="Jurídica"/>
+                </p:column>
+                <p:column headerText="CPF/CNPJ">
+                    <h:outputText value="00.623.904/0001-73"/>
+                </p:column>
+
+                <p:column style="text-align: center; width: 50px">
+                    <p:button icon="ui-icon-pencil" title="Editar"/>
+                    <p:button icon="ui-icon-trash" title="Excluir"/>
+                </p:column>
+            </p:dataTable>
+        </form>
+    </ui:define>
+</ui:composition>
