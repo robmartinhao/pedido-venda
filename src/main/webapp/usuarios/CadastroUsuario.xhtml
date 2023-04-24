@@ -33,5 +33,29 @@
             <p:password id="senha" value=""/>
 
         </p:panelGrid>
+
+
+        <p:panelGrid columns="2" id="panel-select" style="width: 100%; margin-top: 20px"
+                     columnClasses="rotulo, campo">
+            <p:selectOneMenu>
+                <f:selectItem itemLabel="Administradores"/>
+                <f:selectItem itemLabel="Auxiliares"/>
+                <f:selectItem itemLabel="Vendedores"/>
+            </p:selectOneMenu>
+            <p:commandButton value="Adicionar endereço"/>
+        </p:panelGrid>
+
+        <p:dataTable id="grupoTable" value="#{pesquisaUsuariosBean.usuariosFiltrados}" var="grupo"
+                     style="margin-top: 10px" emptyMessage="Nenhum grupo encontrado."
+                     rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+            <p:column headerText="Grupo" style="text-align: center; width: 450px">
+                <h:outputText value="Vendedores"/>
+            </p:column>
+
+            <p:column style="text-align: center; width: 10px">
+                <p:button icon="ui-icon-trash" title="Excluir"/>
+            </p:column>
+        </p:dataTable>
+
     </ui:define>
 </ui:composition>
