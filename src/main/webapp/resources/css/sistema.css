@@ -3,19 +3,19 @@
 body {
     font-size: 12px;
     font-family: Arial, Helvetica, sans-serif;
-    margin: 0px;
+    margin: 0;
     font-weight: normal;
 }
 
 header {
-    padding: 5px 0px;
+    padding: 5px 0;
     margin-bottom: 20px;
     height: 30px;
 
     background-color: #545454;
     color: #fff;
 
-    box-shadow: 0px 2px 2px #ccc;
+    box-shadow: 0 2px 2px #ccc;
 }
 
 header > div {
@@ -23,19 +23,19 @@ header > div {
 }
 
 #conteudo {
-    padding: 0px 8px;
+    padding: 0 8px;
 }
 
 footer {
-    padding: 0px 8px;
+    padding: 0 8px;
     margin-bottom: 10px;
 }
 
 h1 {
     font-size: 24px;
     font-weight: 500;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
 }
 
 #login-dialog {
@@ -97,7 +97,7 @@ h1 {
 }
 
 .ui-tabs {
-    padding: 0px !important;
+    padding: 0 !important;
 }
 
 .ui-tabs .ui-tabs-nav {
@@ -105,6 +105,22 @@ h1 {
 }
 
 .ui-tabs.ui-tabs-top > .ui-tabs-nav {
-    padding: 0px !important;
+    padding: 0 !important;
 }
 /* Customiza TabView - fim */
+
+/* Menu sistema inicio */
+.menu-sistema {
+    border: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+}
+
+.menu-sistema .ui-menu-parent > a .ui-menuitem-text, .menu-sistema > .ui-menu-list > .ui-menuitem > a > .ui-menuitem-text {
+    color: #ffffff !important;
+}
+
+.menu-sistema .ui-icon-triangle-1-s {
+    background: url(#{resource['images:seta-para-baixo.png']}) no-repeat;
+}
+/* Menu sistema fim */
