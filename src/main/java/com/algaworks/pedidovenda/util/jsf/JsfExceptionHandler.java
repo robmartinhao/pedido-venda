@@ -1,5 +1,7 @@
 package com.algaworks.pedidovenda.util.jsf;
 
+import com.algaworks.pedidovenda.service.NegocioException;
+
 import javax.faces.FacesException;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
@@ -33,12 +35,20 @@ public class JsfExceptionHandler extends ExceptionHandlerWrapper {
             ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
             Throwable exception = context.getException();
 
+            NegocioException negocioException = getNegocioException(exception);
+
             boolean handled = false;
 
             try {
                 if (exception instanceof ViewExpiredException) {
                     handled = true;
                     redirect("/");
+                } else if (negocioException != null) {
+                    handled = true;
+                    FacesUtil.addErrorMessage(negocioException.getMessage());
+                } else {
+                    handled = true;
+                    redirect("/Erro.xhtml");
                 }
             } finally {
                 if (handled) {
@@ -47,6 +57,15 @@ public class JsfExceptionHandler extends ExceptionHandlerWrapper {
             }
             getWrapped().handle();
         }
+    }
+
+    private NegocioException getNegocioException(Throwable exception) {
+        if (exception instanceof NegocioException) {
+            return (NegocioException) exception;
+        } else if (exception.getCause() != null) {
+            return getNegocioException(exception.getCause());
+        }
+        return null;
     }
 
     private void redirect(String page) {
