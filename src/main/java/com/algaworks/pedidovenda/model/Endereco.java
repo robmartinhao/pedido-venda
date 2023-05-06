@@ -6,19 +6,33 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@Table(name = "endereco")
 public class Endereco implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 150)
     private String logradouro;
+
+    @Column(nullable = false, length = 20)
     private String numero;
+
+    @Column(length = 150)
     private String complemento;
+
+    @Column(nullable = false, length = 60)
     private String cidade;
+
+    @Column(nullable = false, length = 60)
     private String uf;
+
+    @Column(nullable = false, length = 9)
     private String cep;
 
     @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
 

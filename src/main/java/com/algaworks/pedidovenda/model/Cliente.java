@@ -8,14 +8,24 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "cliente")
 public class Cliente implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String nome;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(name="doc_receita_federal", nullable = false, length = 14)
     private String documentoReceitaFederal;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
     private TipoPessoa tipo;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
