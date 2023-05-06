@@ -1,5 +1,7 @@
 package com.algaworks.pedidovenda.model;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -7,20 +9,54 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "pedido")
 public class Pedido implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "data_criacao", nullable = false)
     private Date dataCriacao;
+
+    @Column(columnDefinition = "text")
     private String observacao;
-    private Date dataEntraga;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "data_entrega", nullable = false)
+    private Date dataEntrega;
+
+    @Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorFrete;
+
+    @Column(name = "valor_desconto", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorDesconto;
+
+    @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorTotal;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private StatusPedido status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private FormaPagamento formaPagamento;
+
+    @ManyToOne
+    @JoinColumn(name = "vendedor_id", nullable = false)
     private Usuario vendedor;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+
+    @Embedded
     private EnderecoEntrega enderecoEntrega;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens = new ArrayList<>();
 
     public Long getId() {
@@ -47,12 +83,12 @@ public class Pedido implements Serializable {
         this.observacao = observacao;
     }
 
-    public Date getDataEntraga() {
-        return dataEntraga;
+    public Date getDataEntrega() {
+        return dataEntrega;
     }
 
-    public void setDataEntraga(Date dataEntraga) {
-        this.dataEntraga = dataEntraga;
+    public void setDataEntrega(Date dataEntraga) {
+        this.dataEntrega = dataEntraga;
     }
 
     public BigDecimal getValorFrete() {

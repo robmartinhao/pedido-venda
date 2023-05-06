@@ -1,16 +1,31 @@
 package com.algaworks.pedidovenda.model;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "item_pedido")
 public class ItemPedido implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 3)
     private Integer quantidade;
+
+    @Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorUnitario;
+
+    @ManyToOne
+    @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
+    @ManyToOne
+    @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
     public Long getId() {
