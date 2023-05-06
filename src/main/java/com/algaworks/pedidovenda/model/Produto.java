@@ -13,7 +13,7 @@ public class Produto implements Serializable {
     private BigDecimal valorUnitario;
     private Integer quantidadeEstoque;
 
-    private List<Categoria> categorias;
+    private Categoria categoria;
 
     public Long getId() {
         return id;
@@ -55,12 +55,12 @@ public class Produto implements Serializable {
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
-    public List<Categoria> getCategorias() {
-        return categorias;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setCategorias(List<Categoria> categorias) {
-        this.categorias = categorias;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.algaworks.pedidovenda.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ public class Usuario implements Serializable {
     private String email;
     private String senha;
 
-    private List<Grupo> grupos;
+    private List<Grupo> grupos = new ArrayList<>();
 
     public Long getId() {
         return id;
