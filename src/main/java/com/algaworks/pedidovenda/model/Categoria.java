@@ -1,15 +1,28 @@
 package com.algaworks.pedidovenda.model;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name="categoria")
 public class Categoria implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 60)
     private String descricao;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_pai_id")
     private Categoria categoriaPai;
+
+    @OneToMany(mappedBy = "categoriaPai", cascade = CascadeType.ALL)
     private List<Categoria> subcategorias = new ArrayList<>();
 
     public Long getId() {
