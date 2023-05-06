@@ -1,12 +1,22 @@
 package com.algaworks.pedidovenda.model;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
+@Table(name="grupo")
 public class Grupo implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String nome;
+
+    @Column(nullable=false, length=80)
     private String descricao;
 
     public Long getId() {

@@ -7,7 +7,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
 
-public class Teste {
+public class TesteCliente {
 
     public static void main(String[] args) {
 
