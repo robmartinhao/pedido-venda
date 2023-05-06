@@ -1,11 +1,15 @@
 package com.algaworks.pedidovenda.model;
 
-import javax.persistence.Entity;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
 public class Endereco implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String logradouro;
     private String numero;
@@ -13,6 +17,8 @@ public class Endereco implements Serializable {
     private String cidade;
     private String uf;
     private String cep;
+
+    @ManyToOne
     private Cliente cliente;
 
 
