@@ -2,6 +2,9 @@ package com.algaworks.pedidovenda.model;
 
 import jakarta.persistence.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -23,6 +26,7 @@ public class Produto implements Serializable {
     @Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorUnitario;
 
+    @NotNull @Min(0) @Max(9999)
     @Column(name = "quantidade_estoque", nullable = false, length = 5)
     private Integer quantidadeEstoque;
 
