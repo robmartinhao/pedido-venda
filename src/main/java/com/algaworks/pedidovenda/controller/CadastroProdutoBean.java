@@ -2,7 +2,7 @@ package com.algaworks.pedidovenda.controller;
 
 import com.algaworks.pedidovenda.model.Produto;
 
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -17,7 +17,6 @@ public class CadastroProdutoBean implements Serializable {
     }
 
     public void salvar() {
-        System.out.println(produto.getQuantidadeEstoque());
     }
 
     public Produto getProduto() {
