@@ -2,9 +2,7 @@ package com.algaworks.pedidovenda.model;
 
 import jakarta.persistence.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -17,12 +15,16 @@ public class Produto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Size(max = 80)
     @Column(nullable = false, length = 80)
     private String nome;
 
+    @NotBlank
     @Column(unique = true, nullable = false, length = 20)
     private String sku;
 
+    @NotNull
     @Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorUnitario;
 
@@ -30,6 +32,7 @@ public class Produto implements Serializable {
     @Column(name = "quantidade_estoque", nullable = false, length = 5)
     private Integer quantidadeEstoque;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
