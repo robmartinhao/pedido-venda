@@ -1,6 +1,7 @@
 package com.algaworks.pedidovenda.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_criacao", nullable = false)
     private Date dataCriacao;
@@ -24,31 +26,39 @@ public class Pedido implements Serializable {
     @Column(columnDefinition = "text")
     private String observacao;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "data_entrega", nullable = false)
     private Date dataEntrega;
 
+    @NotNull
     @Column(name = "valor_frete", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorFrete;
 
+    @NotNull
     @Column(name = "valor_desconto", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorDesconto;
 
+    @NotNull
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorTotal;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private StatusPedido status;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private FormaPagamento formaPagamento;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "vendedor_id", nullable = false)
     private Usuario vendedor;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
