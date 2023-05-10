@@ -1,13 +1,11 @@
 package com.algaworks.pedidovenda.model;
 
 
+import com.algaworks.pedidovenda.validation.SKU;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 
 import java.io.Serializable;
@@ -27,7 +25,7 @@ public class Produto implements Serializable {
     @Column(nullable = false, length = 80)
     private String nome;
 
-    @NotBlank
+    @NotBlank @SKU
     @Column(unique = true, nullable = false, length = 20)
     private String sku;
 
