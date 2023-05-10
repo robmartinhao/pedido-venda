@@ -17,6 +17,7 @@ public class CadastroProdutoBean implements Serializable {
     }
 
     public void salvar() {
+        System.out.println("Teste");
     }
 
     public Produto getProduto() {

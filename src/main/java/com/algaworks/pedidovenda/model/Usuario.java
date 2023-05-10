@@ -1,6 +1,10 @@
 package com.algaworks.pedidovenda.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,10 +19,15 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank @Size(max = 80)
     @Column(nullable = false, length = 80)
     private String nome;
+
+    @NotBlank
     @Column(unique = true, nullable = false)
     private String email;
+
+    @NotBlank
     @Column(nullable = false, length = 20)
     private String senha;
 
