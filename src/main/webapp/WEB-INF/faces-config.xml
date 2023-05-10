@@ -6,7 +6,7 @@
         version="2.2">
 
     <application>
-        <message-bundle>com.algaworks.pedidovenda.Messages</message-bundle>
+        <message-bundle>Messages</message-bundle>
 
         <locale-config>
             <default-locale>pt_BR</default-locale>
