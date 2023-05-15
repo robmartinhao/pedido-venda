@@ -2,6 +2,7 @@ package com.algaworks.pedidovenda.controller;
 
 import com.algaworks.pedidovenda.model.Categoria;
 import com.algaworks.pedidovenda.model.Produto;
+import com.algaworks.pedidovenda.repository.Categorias;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -15,13 +16,13 @@ import java.util.List;
 public class CadastroProdutoBean implements Serializable {
 
     @Inject
-    private EntityManager manager;
+    private Categorias categorias;
     private Produto produto;
     private List<Categoria> categoriasRaizes;
 
     public void inicializar() {
         System.out.println("Inicializando...");
-        categoriasRaizes = manager.createQuery("from Categoria", Categoria.class).getResultList();
+        categoriasRaizes = categorias.raizes();
     }
 
     public CadastroProdutoBean() {
