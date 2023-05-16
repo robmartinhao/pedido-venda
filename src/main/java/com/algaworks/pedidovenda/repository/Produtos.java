@@ -1,6 +1,7 @@
 package com.algaworks.pedidovenda.repository;
 
 import com.algaworks.pedidovenda.model.Produto;
+import com.algaworks.pedidovenda.util.jpa.Transactional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -14,11 +15,7 @@ public class Produtos implements Serializable {
     private EntityManager manager;
 
     public Produto guardar(Produto produto) {
-        EntityTransaction trx = manager.getTransaction();
-        trx.begin();
-        produto = manager.merge(produto);
-        trx.commit();
-        return produto;
+        return manager.merge(produto);
     }
 
     public Produto porSku(String sku) {
