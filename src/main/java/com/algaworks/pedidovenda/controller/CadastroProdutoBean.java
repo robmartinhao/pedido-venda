@@ -3,12 +3,12 @@ package com.algaworks.pedidovenda.controller;
 import com.algaworks.pedidovenda.model.Categoria;
 import com.algaworks.pedidovenda.model.Produto;
 import com.algaworks.pedidovenda.repository.Categorias;
+import com.algaworks.pedidovenda.service.CadastroProdutoService;
 import com.algaworks.pedidovenda.util.jsf.FacesUtil;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +19,8 @@ public class CadastroProdutoBean implements Serializable {
 
     @Inject
     private Categorias categorias;
+    @Inject
+    private CadastroProdutoService cadastroProdutoService;
     private Produto produto;
     @NotNull
     private Categoria categoriaPai;
@@ -37,12 +39,19 @@ public class CadastroProdutoBean implements Serializable {
     }
 
     public CadastroProdutoBean() {
-        this.produto = new Produto();
+        limpar();
+    }
+
+    private void limpar() {
+        produto = new Produto();
+        categoriaPai = null;
+        subcategorias = null;
     }
 
     public void salvar() {
-        System.out.println("Categoria pai selecionada: " + categoriaPai.getDescricao());
-        System.out.println("Subcategoria selecionada: " + produto.getCategoria().getDescricao());
+        this.produto = cadastroProdutoService.salvar(this.produto);
+        limpar();
+        FacesUtil.addInfoMessage("Produto salvo com sucesso!");
     }
 
     public Produto getProduto() {
