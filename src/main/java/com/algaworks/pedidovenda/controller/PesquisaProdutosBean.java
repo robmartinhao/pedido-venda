@@ -1,24 +1,39 @@
 package com.algaworks.pedidovenda.controller;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import java.util.ArrayList;
+import com.algaworks.pedidovenda.model.Produto;
+import com.algaworks.pedidovenda.repository.Produtos;
+import com.algaworks.pedidovenda.repository.filter.ProdutoFilter;
+
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import java.io.Serializable;
 import java.util.List;
 
-@ManagedBean
-@RequestScoped
-public class PesquisaProdutosBean {
+@Named
+@ViewScoped
+public class PesquisaProdutosBean implements Serializable {
 
-    private List<Integer> produtosFiltrados;
+    @Inject
+    private Produtos produtos;
+
+    private ProdutoFilter filtro;
+    private List<Produto> produtosFiltrados;
 
     public PesquisaProdutosBean() {
-        produtosFiltrados = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            produtosFiltrados.add(i);
-        }
+        this.filtro = new ProdutoFilter();
     }
 
-    public List<Integer> getProdutosFiltrados() {
+    public void pesquisar() {
+        produtosFiltrados = produtos.filtrados(filtro);
+    }
+
+    public ProdutoFilter getFiltro() {
+        return filtro;
+    }
+
+    public List<Produto> getProdutosFiltrados() {
         return produtosFiltrados;
     }
 }
