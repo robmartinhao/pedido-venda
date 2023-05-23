@@ -1,5 +1,6 @@
 package com.algaworks.pedidovenda.repository;
 
+import com.algaworks.pedidovenda.model.Categoria;
 import com.algaworks.pedidovenda.model.Produto;
 import com.algaworks.pedidovenda.repository.filter.ProdutoFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -47,5 +48,9 @@ public class Produtos implements Serializable {
         }
 
         return criteria.addOrder(Order.asc("nome")).list();
+    }
+
+    public Produto porId(Long id) {
+        return manager.find(Produto.class, id);
     }
 }
