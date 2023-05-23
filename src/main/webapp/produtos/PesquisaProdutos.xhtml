@@ -10,15 +10,15 @@
 
 
     <ui:define name="corpo">
-        <h:form>
+        <h:form id="frmPesquisa">
             <h1>Pesquisa produtos</h1>
 
-            <p:messages autoUpdate="true" closable="true" />
+            <p:messages autoUpdate="true" closable="true"/>
 
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
                     <p:commandButton value="Pesquisar" action="#{pesquisaProdutosBean.pesquisar}"
-                        update="@form"/>
+                                     update="@form"/>
                 </p:toolbarGroup>
                 <p:toolbarGroup align="right">
                     <p:button value="Novo" outcome="/produtos/CadastroProduto"/>
@@ -35,19 +35,19 @@
             </p:panelGrid>
 
             <p:dataTable id="produtosTable" value="#{pesquisaProdutosBean.produtosFiltrados}" var="produto"
-                style="margin-top: 20px" emptyMessage="Nenhum produto encontrado." rows="20"
-                paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+                         style="margin-top: 20px" emptyMessage="Nenhum produto encontrado." rows="20"
+                         paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
                 <p:column headerText="SKU" style="text-align: center; width: 100px">
                     <h:outputText value="#{produto.sku}"/>
                 </p:column>
                 <p:column headerText="Nome">
-                    <h:outputText value="#{produto.nome}" />
+                    <h:outputText value="#{produto.nome}"/>
                 </p:column>
                 <p:column headerText="Categoria" style="width: 250px">
                     <h:outputText value="#{produto.categoria.categoriaPai.descricao} - #{produto.categoria.descricao}"/>
                 </p:column>
                 <p:column headerText="Valor unitário" style="text-align: right; width: 120px">
-                    <h:outputText value="#{produto.valorUnitario}" />
+                    <h:outputText value="#{produto.valorUnitario}"/>
                 </p:column>
                 <p:column headerText="Estoque" style="text-align: center; width: 120px">
                     <h:outputText value="#{produto.quantidadeEstoque}">
@@ -58,14 +58,21 @@
                     <p:button outcome="/produtos/CadastroProduto" icon="ui-icon-pencil" title="Editar">
                         <f:param name="produto" value="#{produto.id}"/>
                     </p:button>
-                    <p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="confirmacaoExclusao.show()"/>
+                    <p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+                                     process="@this" update=":frmPesquisa:confirmacaoExclusaoDialog">
+                        <f:setPropertyActionListener target="#{pesquisaProdutosBean.produtoSelecionado}"
+                                                     value="#{produto}" />
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
 
-            <p:confirmDialog header="Exclusão de produto" message="Tem certeza que deseja excluir o produto?"
-                             widgetVar="confirmacaoExclusao">
-                <p:button value="Não" onclick="confirmacaoExclusao.hide(); return false;"/>
-                <p:commandButton value="Sim" oncomplete="confirmacaoExclusao.hide()"/>
+            <p:confirmDialog header="Exclusão de produto"
+                             message="Tem certeza que deseja excluir o produto #{pesquisaProdutosBean.produtoSelecionado.sku}?"
+                             widgetVar="confirmacaoExclusao" id="confirmacaoExclusaoDialog">
+                <p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;"/>
+                <p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+                                 action="#{pesquisaProdutosBean.excluir}" process="@this"
+                                 update=":frmPesquisa:produtosTable"/>
             </p:confirmDialog>
         </h:form>
     </ui:define>
