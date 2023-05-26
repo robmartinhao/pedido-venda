@@ -1,6 +1,5 @@
 package com.algaworks.pedidovenda.repository;
 
-import com.algaworks.pedidovenda.model.Categoria;
 import com.algaworks.pedidovenda.model.Produto;
 import com.algaworks.pedidovenda.repository.filter.ProdutoFilter;
 import com.algaworks.pedidovenda.service.NegocioException;
