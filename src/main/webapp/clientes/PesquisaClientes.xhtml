@@ -4,7 +4,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                >
+>
 
     <ui:define name="titulo">Pesquisa de clientes</ui:define>
 
@@ -17,7 +17,7 @@
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
                     <p:commandButton value="Pesquisar" action="#{pesquisaClientesBean.pesquisar}"
-                        update="@form"/>
+                                     update="@form"/>
                 </p:toolbarGroup>
                 <p:toolbarGroup align="right">
                     <p:button value="Novo" outcome="/clientes/CadastroCliente"/>
@@ -27,15 +27,16 @@
             <p:panelGrid columns="2" id="panel" style="width: 100%; margin-top: 20px"
                          columnClasses="rotulo, campo">
                 <p:outputLabel value="CPF/CNPJ" for="documento-receita-federal"/>
-                <p:inputText id="documento-receita-federal" size="20" value="#{pesquisaClientesBean.documentoReceitaFederal}"/>
+                <p:inputText id="documento-receita-federal" size="20"
+                             value="#{pesquisaClientesBean.documentoReceitaFederal}"/>
 
                 <p:outputLabel value="Nome" for="nome"/>
                 <p:inputText id="nome" size="60" value="#{pesquisaClientesBean.nome}"/>
             </p:panelGrid>
 
             <p:dataTable id="clientesTable" value="#{pesquisaClientesBean.clientesFiltrados}" var="cliente"
-                style="margin-top: 20px" emptyMessage="Nenhum cliente encontrado."
-                rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+                         style="margin-top: 20px" emptyMessage="Nenhum cliente encontrado."
+                         rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
                 <p:column headerText="Nome" style="text-align: center; width: 100px">
                     <h:outputText value="#{cliente.nome}"/>
                 </p:column>
@@ -45,12 +46,30 @@
                 <p:column headerText="CPF/CNPJ">
                     <h:outputText value="#{cliente.documentoReceitaFederal}"/>
                 </p:column>
+                <p:column headerText="Email">
+                    <h:outputText value="#{cliente.email}"/>
+                </p:column>
 
                 <p:column style="text-align: center; width: 50px">
-                    <p:button icon="ui-icon-pencil" title="Editar"/>
-                    <p:button icon="ui-icon-trash" title="Excluir"/>
+                    <p:button outcome="/clientes/CadastroCliente" icon="ui-icon-pencil" title="Editar">
+                        <f:param name="cliente" value="#{cliente.id}"/>
+                    </p:button>
+                    <p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmacaoExclusao').show()"
+                                     process="@this" update=":frmPesquisa:confirmacaoExclusaoDialog">
+                        <f:setPropertyActionListener target="#{pesquisaClientesBean.clienteSelecionado}"
+                                                     value="#{cliente}"/>
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
+
+            <p:confirmDialog header="Exclusão de produto"
+                             message="Tem certeza que deseja excluir o produto #{pesquisaClientesBean.clienteSelecionado.email}?"
+                             widgetVar="confirmacaoExclusao" id="confirmacaoExclusaoDialog">
+                <p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false;"/>
+                <p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+                                 action="#{pesquisaClientesBean.excluir}" process="@this"
+                                 update=":frmPesquisa:clientesTable"/>
+            </p:confirmDialog>
         </h:form>
     </ui:define>
 </ui:composition>

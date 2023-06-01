@@ -72,7 +72,8 @@ public class Cliente implements Serializable {
     public void setDocumentoReceitaFederal(String documentoReceitaFederal) {
         String documentoFiltrado = documentoReceitaFederal
                 .replace("/", "")
-                .replace(".", "");
+                .replace(".", "")
+                .replace("-", "");
         this.documentoReceitaFederal = documentoFiltrado;
     }
 

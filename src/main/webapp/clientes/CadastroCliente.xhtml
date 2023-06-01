@@ -41,7 +41,7 @@
                     <p:selectOneRadio id="tipo" value="#{cadastroClienteBean.cliente.tipo}">
                         <f:selectItems value="#{cadastroClienteBean.tiposPessoa}"
                             var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}"/>
-                        <p:ajax event="change" process="@this" update="frmCliente"/>
+                        <p:ajax event="change" process="@this" update="panel"/>
                     </p:selectOneRadio>
                 </h:panelGroup>
 

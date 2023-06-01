@@ -16,7 +16,7 @@ public class CadastroClienteService implements Serializable {
     public Cliente salvar(Cliente cliente) {
         Cliente clienteExistente = clientes.porEmail(cliente.getEmail());
         if (clienteExistente != null && !clienteExistente.equals(cliente)) {
-            throw new NegocioException("Já existe um Cliente com o SKU informado.");
+            throw new NegocioException("Já existe um Cliente com o E-mail informado.");
         }
         return clientes.guardar(cliente);
     }
