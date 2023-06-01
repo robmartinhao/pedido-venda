@@ -29,14 +29,14 @@ public class Cliente implements Serializable {
     private String email;
 
     @NotBlank
-    @Size(max = 14)
+    @Size(max = 18)
     @Column(name="doc_receita_federal", nullable = false, length = 14)
     private String documentoReceitaFederal;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private TipoPessoa tipo;
+    private TipoPessoa tipo = TipoPessoa.JURIDICA;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos = new ArrayList<>();
@@ -70,7 +70,10 @@ public class Cliente implements Serializable {
     }
 
     public void setDocumentoReceitaFederal(String documentoReceitaFederal) {
-        this.documentoReceitaFederal = documentoReceitaFederal;
+        String documentoFiltrado = documentoReceitaFederal
+                .replace("/", "")
+                .replace(".", "");
+        this.documentoReceitaFederal = documentoFiltrado;
     }
 
     public TipoPessoa getTipo() {

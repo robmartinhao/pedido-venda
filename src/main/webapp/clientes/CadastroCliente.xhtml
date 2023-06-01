@@ -3,21 +3,27 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:o="http://omnifaces.org/ui">
 
-    <ui:define name="titulo">Novo cliente</ui:define>
+    <ui:define name="titulo">#{cadastroClienteBean.isEditando() ? 'Edição de cliente' : 'Novo cliente'}</ui:define>
 
     <ui:define name="corpo">
-        <h:form>
+
+        <f:metadata>
+            <o:viewParam name="cliente" value="#{cadastroClienteBean.cliente}"/>
+        </f:metadata>
+
+        <h:form id="frmCliente">
             <h1>Novo cliente</h1>
 
-            <p:messages autoUpdate="true" closable="true" />
+            <p:messages autoUpdate="true" closable="true"/>
 
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
                     <p:button value="Novo" outcome="/clientes/CadastroCliente"/>
                     <p:commandButton value="Salvar" id="botaoSalvar"
-                                     action="#{cadastroClienteBean.salvar}"/>
+                                     action="#{cadastroClienteBean.salvar}" update="@form"/>
                 </p:toolbarGroup>
                 <p:toolbarGroup align="right">
                     <p:button value="Pesquisa" outcome="/clientes/PesquisaClientes"/>
@@ -33,13 +39,22 @@
                 <p:outputLabel value="Tipo" for="tipo"/>
                 <h:panelGroup>
                     <p:selectOneRadio id="tipo" value="#{cadastroClienteBean.cliente.tipo}">
-                        <f:selectItem itemLabel="Física" itemValue="F"/>
-                        <f:selectItem itemLabel="Jurídica" itemValue="J"/>
+                        <f:selectItems value="#{cadastroClienteBean.tiposPessoa}"
+                            var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}"/>
+                        <p:ajax event="change" process="@this" update="frmCliente"/>
                     </p:selectOneRadio>
                 </h:panelGroup>
 
-                <p:outputLabel value="CNPJ" for="cnpj"/>
+                <p:outputLabel id="id-label-cnpj" value="CNPJ" for="cnpj"
+                               rendered="#{cadastroClienteBean.pessoaJuridica}"/>
                 <p:inputMask mask="99.999.999/9999/99" id="cnpj"
+                             rendered="#{cadastroClienteBean.pessoaJuridica}"
+                             value="#{cadastroClienteBean.cliente.documentoReceitaFederal}"/>
+
+                <p:outputLabel id="id-label-cpf" value="CPF" for="cpf"
+                               rendered="#{!cadastroClienteBean.pessoaJuridica}"/>
+                <p:inputMask mask="999.999.999-99" id="cpf"
+                             rendered="#{!cadastroClienteBean.pessoaJuridica}"
                              value="#{cadastroClienteBean.cliente.documentoReceitaFederal}"/>
 
                 <p:outputLabel value="E-mail" for="email"/>

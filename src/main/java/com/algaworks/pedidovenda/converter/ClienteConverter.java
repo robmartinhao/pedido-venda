@@ -1,7 +1,9 @@
 package com.algaworks.pedidovenda.converter;
 
-import com.algaworks.pedidovenda.model.Categoria;
-import com.algaworks.pedidovenda.repository.Categorias;
+import com.algaworks.pedidovenda.model.Cliente;
+import com.algaworks.pedidovenda.model.Usuario;
+import com.algaworks.pedidovenda.repository.Clientes;
+import com.algaworks.pedidovenda.repository.Usuarios;
 import com.algaworks.pedidovenda.util.cdi.CDIServiceLocator;
 
 import javax.faces.component.UIComponent;
@@ -9,22 +11,22 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@FacesConverter(forClass = Categoria.class)
-public class CategoriaConverter implements Converter {
+@FacesConverter(forClass = Cliente.class)
+public class ClienteConverter implements Converter {
 
     //@Inject
-    private Categorias categorias;
+    private Clientes clientes;
 
-    public CategoriaConverter() {
-        this.categorias = CDIServiceLocator.getBean(Categorias.class);
+    public ClienteConverter() {
+        this.clientes = CDIServiceLocator.getBean(Clientes.class);
     }
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
-        Categoria retorno = null;
+        Cliente retorno = null;
         if (s != null) {
             Long id = Long.valueOf(s);
-            retorno = categorias.porId(id);
+            retorno = clientes.porId(id);
         }
         return retorno;
     }
@@ -32,7 +34,8 @@ public class CategoriaConverter implements Converter {
     @Override
     public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
         if(o != null) {
-            return ((Categoria) o).getId().toString();
+            Cliente cliente = (Cliente) o;
+            return cliente.getId() == null ? null : cliente.getId().toString();
         }
         return "";
     }

@@ -9,12 +9,15 @@
     <ui:define name="titulo">Pesquisa de clientes</ui:define>
 
     <ui:define name="corpo">
-        <form>
+        <h:form id="frmPesquisa">
             <h1>Pesquisa de clientes</h1>
+
+            <p:messages autoUpdate="true" closable="true"/>
 
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
-                    <p:commandButton value="Pesquisar"/>
+                    <p:commandButton value="Pesquisar" action="#{pesquisaClientesBean.pesquisar}"
+                        update="@form"/>
                 </p:toolbarGroup>
                 <p:toolbarGroup align="right">
                     <p:button value="Novo" outcome="/clientes/CadastroCliente"/>
@@ -23,24 +26,24 @@
 
             <p:panelGrid columns="2" id="panel" style="width: 100%; margin-top: 20px"
                          columnClasses="rotulo, campo">
-                <p:outputLabel value="CPF/CNPJ"/>
-                <p:inputText size="20"/>
+                <p:outputLabel value="CPF/CNPJ" for="documento-receita-federal"/>
+                <p:inputText id="documento-receita-federal" size="20" value="#{pesquisaClientesBean.documentoReceitaFederal}"/>
 
-                <p:outputLabel value="Nome"/>
-                <p:inputText size="60"/>
+                <p:outputLabel value="Nome" for="nome"/>
+                <p:inputText id="nome" size="60" value="#{pesquisaClientesBean.nome}"/>
             </p:panelGrid>
 
             <p:dataTable id="clientesTable" value="#{pesquisaClientesBean.clientesFiltrados}" var="cliente"
                 style="margin-top: 20px" emptyMessage="Nenhum cliente encontrado."
                 rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
                 <p:column headerText="Nome" style="text-align: center; width: 100px">
-                    <h:outputText value="Supermercado João das Couves"/>
+                    <h:outputText value="#{cliente.nome}"/>
                 </p:column>
                 <p:column headerText="Tipo">
-                    <h:outputText value="Jurídica"/>
+                    <h:outputText value="#{cliente.tipo}"/>
                 </p:column>
                 <p:column headerText="CPF/CNPJ">
-                    <h:outputText value="00.623.904/0001-73"/>
+                    <h:outputText value="#{cliente.documentoReceitaFederal}"/>
                 </p:column>
 
                 <p:column style="text-align: center; width: 50px">
@@ -48,6 +51,6 @@
                     <p:button icon="ui-icon-trash" title="Excluir"/>
                 </p:column>
             </p:dataTable>
-        </form>
+        </h:form>
     </ui:define>
 </ui:composition>
