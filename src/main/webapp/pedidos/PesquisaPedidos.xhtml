@@ -3,8 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                >
+                xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <ui:define name="titulo">Pesquisa pedidos</ui:define>
 
@@ -47,13 +46,13 @@
                 <p:outputLabel value="Status"/>
                 <p:selectManyCheckbox value="#{pesquisaPedidosBean.filtro.statuses}">
                     <f:selectItems value="#{pesquisaPedidosBean.statuses}" var="status"
-                        itemValue="#{status}" itemLabel="#{status.descricao}"/>
+                                   itemValue="#{status}" itemLabel="#{status.descricao}"/>
                 </p:selectManyCheckbox>
             </p:panelGrid>
 
             <p:dataTable id="pedidosTable" value="#{pesquisaPedidosBean.pedidosFiltrados}" var="pedido"
-                style="margin-top: 20px" emptyMessage="Nenhum pedido encontrado."
-                rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+                         style="margin-top: 20px" emptyMessage="Nenhum pedido encontrado."
+                         rows="20" paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom">
                 <p:column headerText="Número" style="text-align: center; width: 100px">
                     <h:outputText value="#{pedido.id}"/>
                 </p:column>
@@ -77,7 +76,9 @@
                     <h:outputText value="#{pedido.status.descricao}"/>
                 </p:column>
                 <p:column style="text-align: center; width: 50px">
-                    <p:button icon="ui-icon-pencil" title="Editar"/>
+                    <p:button icon="ui-icon-pencil" title="Editar" outcome="/pedidos/CadastroPedido">
+                        <f:param name="pedido" value="#{pedido.id}"/>
+                    </p:button>
                 </p:column>
             </p:dataTable>
         </h:form>
