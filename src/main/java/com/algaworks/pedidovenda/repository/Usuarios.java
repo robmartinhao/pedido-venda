@@ -61,4 +61,9 @@ public class Usuarios implements Serializable {
 
         }
     }
+
+    public List<Usuario> vendedores() {
+        return this.manager.createQuery("from Usuario", Usuario.class)
+                .getResultList();
+    }
 }

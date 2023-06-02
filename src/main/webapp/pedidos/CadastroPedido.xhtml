@@ -4,6 +4,10 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{cadastroPedidoBean.inicializar}"/>
+    </f:metadata>
 
     <ui:define name="titulo">Novo pedido</ui:define>
 
@@ -12,7 +16,7 @@
         <h:form>
             <h1>Novo pedido</h1>
 
-            <p:messages autoUpdate="true"/>
+            <p:messages autoUpdate="true" closable="true"/>
 
             <ui:include src="/WEB-INF/template/pedidos/BotoesPedido.xhtml"/>
 
@@ -20,7 +24,7 @@
 
             <p:tabView style="margin-top: 20px">
                 <p:tab title="Itens">
-                    <ui:include src="/WEB-INF/template/pedidos/ItensPedido.xhtml"></ui:include>
+<!--                    <ui:include src="/WEB-INF/template/pedidos/ItensPedido.xhtml"></ui:include>-->
                 </p:tab>
                 <p:tab title="Dados de entrega">
                     <ui:include src="/WEB-INF/template/pedidos/DadosEntregaPedido.xhtml"></ui:include>

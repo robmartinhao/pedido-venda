@@ -1,7 +1,6 @@
 package com.algaworks.pedidovenda.repository;
 
 import com.algaworks.pedidovenda.model.Cliente;
-import com.algaworks.pedidovenda.model.Usuario;
 import com.algaworks.pedidovenda.service.NegocioException;
 import com.algaworks.pedidovenda.util.jpa.Transactional;
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +63,13 @@ public class Clientes implements Serializable {
             return null;
 
         }
+    }
+
+    public List<Cliente> porNome(String nome) {
+        return this.manager.createQuery("from Cliente " +
+                "where upper(nome) like :nome", Cliente.class)
+                .setParameter("nome", nome.toUpperCase() + "%")
+                .getResultList();
     }
 
 }
