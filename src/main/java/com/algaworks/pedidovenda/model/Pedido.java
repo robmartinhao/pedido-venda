@@ -66,7 +66,7 @@ public class Pedido implements Serializable {
     @Embedded
     private EnderecoEntrega enderecoEntrega;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ItemPedido> itens = new ArrayList<>();
 
     public Long getId() {
@@ -194,5 +194,23 @@ public class Pedido implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Transient
+    public BigDecimal getValorSubtotal() {
+        return this.valorTotal.subtract(this.getValorFrete()).add(this.valorDesconto);
+    }
+
+    public void recalcularValorTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        total = total.add(this.getValorFrete()).subtract(this.valorDesconto);
+
+        for (ItemPedido itemPedido : this.getItens()) {
+            if (itemPedido.getProduto() != null && itemPedido.getProduto().getId() != null) {
+                total = itemPedido.getValorTotal();
+            }
+        }
+        this.setValorTotal(total);
     }
 }

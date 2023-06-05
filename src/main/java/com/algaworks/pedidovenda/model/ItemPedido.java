@@ -80,4 +80,9 @@ public class ItemPedido implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Transient
+    public BigDecimal getValorTotal() {
+        return this.getValorUnitario().multiply(new BigDecimal(this.getQuantidade()));
+    }
 }
