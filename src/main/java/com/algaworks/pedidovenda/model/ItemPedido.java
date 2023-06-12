@@ -15,10 +15,10 @@ public class ItemPedido implements Serializable {
     private Long id;
 
     @Column(nullable = false, length = 3)
-    private Integer quantidade;
+    private Integer quantidade = 1;
 
     @Column(name = "valor_unitario", nullable = false, precision = 10, scale = 2)
-    private BigDecimal valorUnitario;
+    private BigDecimal valorUnitario = BigDecimal.ZERO;
 
     @ManyToOne
     @JoinColumn(name = "produto_id", nullable = false)
@@ -81,8 +81,11 @@ public class ItemPedido implements Serializable {
         return Objects.hash(id);
     }
 
-    @Transient
     public BigDecimal getValorTotal() {
-        return this.getValorUnitario().multiply(new BigDecimal(this.getQuantidade()));
+        return this.valorUnitario.multiply(new BigDecimal(this.getQuantidade()));
+    }
+
+    public boolean isProdutoAssociado() {
+        return this.produto != null && this.produto.getId() != null;
     }
 }

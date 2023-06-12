@@ -173,12 +173,10 @@ public class Pedido implements Serializable {
         this.itens = itens;
     }
 
-    @Transient
     public boolean isNovo() {
         return getId() == null;
     }
 
-    @Transient
     public boolean isExistente() {
         return getId() != null;
     }
@@ -196,7 +194,6 @@ public class Pedido implements Serializable {
         return Objects.hash(id);
     }
 
-    @Transient
     public BigDecimal getValorSubtotal() {
         return this.valorTotal.subtract(this.getValorFrete()).add(this.valorDesconto);
     }
@@ -208,9 +205,25 @@ public class Pedido implements Serializable {
 
         for (ItemPedido itemPedido : this.getItens()) {
             if (itemPedido.getProduto() != null && itemPedido.getProduto().getId() != null) {
-                total = itemPedido.getValorTotal();
+                total = total.add(itemPedido.getValorTotal());
             }
         }
         this.setValorTotal(total);
+    }
+
+    public void adicionaItemVazio() {
+        if (this.isOrcamento()) {
+            Produto produto = new Produto();
+
+            ItemPedido item = new ItemPedido();
+            item.setProduto(produto);
+            item.setPedido(this);
+
+            this.getItens().add(0, item);
+        }
+    }
+
+    public boolean isOrcamento() {
+        return StatusPedido.ORCAMENTO.equals(this.status);
     }
 }
