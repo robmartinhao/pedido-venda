@@ -238,4 +238,8 @@ public class Pedido implements Serializable {
     public boolean isValorTotalNegativo() {
         return this.valorTotal.compareTo(BigDecimal.ZERO) < 0;
     }
+
+    public boolean isEmitido() {
+        return this.status.equals(StatusPedido.EMITIDO);
+    }
 }
