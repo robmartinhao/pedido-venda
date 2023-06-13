@@ -242,4 +242,12 @@ public class Pedido implements Serializable {
     public boolean isEmitido() {
         return this.status.equals(StatusPedido.EMITIDO);
     }
+
+    public boolean isNaoEmissivel() {
+        return !this.isEmissivel();
+    }
+
+    private boolean isEmissivel() {
+        return this.isExistente() && this.isOrcamento();
+    }
 }

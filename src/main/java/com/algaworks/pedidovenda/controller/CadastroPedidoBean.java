@@ -9,6 +9,8 @@ import com.algaworks.pedidovenda.util.jsf.FacesUtil;
 import com.algaworks.pedidovenda.validation.SKU;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,6 +31,9 @@ public class CadastroPedidoBean implements Serializable {
     private Produtos produtos;
     @SKU
     private String sku;
+
+    @Produces
+    @PedidoEdicao
     private Pedido pedido;
     private List<Usuario> vendedores;
     private Produto produtoLinhaEditavel;
@@ -48,6 +53,10 @@ public class CadastroPedidoBean implements Serializable {
             this.pedido.adicionaItemVazio();
             this.recalcularPedido();
         }
+    }
+
+    public void pedidoAlterado(@Observes PedidoAlteradoEvent event) {
+        this.pedido = event.getPedido();
     }
 
     public void salvar() {

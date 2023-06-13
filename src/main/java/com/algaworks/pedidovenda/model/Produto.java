@@ -1,6 +1,7 @@
 package com.algaworks.pedidovenda.model;
 
 
+import com.algaworks.pedidovenda.service.NegocioException;
 import com.algaworks.pedidovenda.validation.SKU;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -101,5 +102,15 @@ public class Produto implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void baixarEstoque(Integer quantidade) {
+        int novaQuantidade = this.quantidadeEstoque - quantidade;
+
+        if (novaQuantidade < 0) {
+            throw new NegocioException("Não há disponibilidade no estoque de "
+                    + quantidade + " itens do produto " + this.getSku() + ".");
+        }
+        this.setQuantidadeEstoque(novaQuantidade);
     }
 }
