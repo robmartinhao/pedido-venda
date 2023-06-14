@@ -262,4 +262,12 @@ public class Pedido implements Serializable {
     private boolean isCancelado() {
         return this.status.equals(StatusPedido.CANCELADO);
     }
+
+    public boolean isNaoAlteravel() {
+        return !this.isAlteravel();
+    }
+
+    private boolean isAlteravel() {
+        return this.isOrcamento();
+    }
 }
