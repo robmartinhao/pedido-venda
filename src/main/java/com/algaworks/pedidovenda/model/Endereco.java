@@ -1,6 +1,7 @@
 package com.algaworks.pedidovenda.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,21 +14,26 @@ public class Endereco implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(nullable = false, length = 150)
     private String logradouro;
 
+    @NotNull
     @Column(nullable = false, length = 20)
     private String numero;
 
     @Column(length = 150)
     private String complemento;
 
+    @NotNull
     @Column(nullable = false, length = 60)
     private String cidade;
 
+    @NotNull
     @Column(nullable = false, length = 60)
     private String uf;
 
+    @NotNull
     @Column(nullable = false, length = 9)
     private String cep;
 
