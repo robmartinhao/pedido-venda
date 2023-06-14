@@ -250,4 +250,16 @@ public class Pedido implements Serializable {
     private boolean isEmissivel() {
         return this.isExistente() && this.isOrcamento();
     }
+
+    public boolean isNaoCancelavel() {
+        return !this.isCancelavel();
+    }
+
+    private boolean isCancelavel() {
+        return this.isExistente() && !this.isCancelado();
+    }
+
+    private boolean isCancelado() {
+        return this.status.equals(StatusPedido.CANCELADO);
+    }
 }
