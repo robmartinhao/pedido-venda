@@ -22,7 +22,7 @@ public class MailConfigProducer {
         config.setEnableSsl(Boolean.parseBoolean(props.getProperty("mail.enable.ssl")));
         config.setAuth(Boolean.parseBoolean(props.getProperty("mail.auth")));
         config.setUsername(props.getProperty("mail.username"));
-        config.setUsername(props.getProperty("mail.password"));
+        config.setPassword(props.getProperty("mail.password"));
 
         return config;
     }

@@ -270,4 +270,8 @@ public class Pedido implements Serializable {
     private boolean isAlteravel() {
         return this.isOrcamento();
     }
+
+    public boolean isNaoEnviavelPorEmail() {
+        return this.isNovo() || this.isCancelado();
+    }
 }

@@ -4,9 +4,11 @@ import com.outjected.email.api.MailMessage;
 import com.outjected.email.api.SessionConfig;
 import com.outjected.email.impl.MailMessageImpl;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 
+@RequestScoped
 public class Mailer implements Serializable {
 
     @Inject
