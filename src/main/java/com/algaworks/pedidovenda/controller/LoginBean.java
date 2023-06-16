@@ -18,8 +18,6 @@ import com.algaworks.pedidovenda.util.jsf.FacesUtil;
 @SessionScoped
 public class LoginBean implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Inject
     private FacesContext facesContext;
 

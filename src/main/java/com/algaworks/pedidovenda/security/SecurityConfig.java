@@ -52,5 +52,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(jsfLoginEntry)
                 .accessDeniedHandler(jsfDeniedEntry);
     }
-    }
 }
