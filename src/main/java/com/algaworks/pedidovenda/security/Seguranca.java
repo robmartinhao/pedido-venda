@@ -3,13 +3,17 @@ package com.algaworks.pedidovenda.security;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
-import java.security.Principal;
 
 @Named
 @RequestScoped
 public class Seguranca {
+
+    @Inject
+    ExternalContext externalContext;
 
     public String getNomeUsuario() {
         String nome = null;
@@ -32,5 +36,15 @@ public class Seguranca {
              usuario = (UsuarioSistema) auth.getPrincipal();
          }
         return usuario;
+    }
+
+    public boolean isEmitirPedidoPermitido() {
+        return externalContext.isUserInRole("ADMINISTRADORES")
+                || externalContext.isUserInRole("VENDEDORES");
+    }
+
+    public boolean isCancelarPedidoPermitido() {
+        return externalContext.isUserInRole("ADMINISTRADORES")
+                || externalContext.isUserInRole("VENDEDORES");
     }
 }
