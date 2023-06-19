@@ -1,34 +1,59 @@
 package com.algaworks.pedidovenda.controller;
 
-import org.primefaces.model.chart.CartesianChartModel;
+import com.algaworks.pedidovenda.model.Usuario;
+import com.algaworks.pedidovenda.repository.Pedidos;
+import com.algaworks.pedidovenda.security.UsuarioLogado;
+import com.algaworks.pedidovenda.security.UsuarioSistema;
+
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 @Named
 @RequestScoped
 public class GraficoPedidosBean {
+
+    @Inject
+    private Pedidos pedidos;
+    @Inject
+    @UsuarioLogado
+    private UsuarioSistema usuarioLogado;
+
+    private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM");
 
     private LineChartModel model;
 
     public void preRender() {
 
         this.model = new LineChartModel();
+        this.model.setTitle("Pedidos criados");
+        this.model.setLegendPosition("e");
+        this.model.setAnimate(true);
 
-        adicionarSerie("Todos os pedidos");
-        adicionarSerie("Meus pedidos");
+        this.model.getAxes().put(AxisType.X, new CategoryAxis());
+
+        adicionarSerie("Todos os pedidos", null);
+        adicionarSerie("Meus pedidos", usuarioLogado.getUsuario());
     }
 
-    private void adicionarSerie(String rotulo) {
+    private void adicionarSerie(String rotulo, Usuario criadoPor) {
+        Map<Date, BigDecimal> valoresPorData = this.pedidos.valoresTotaisPorData(15, criadoPor);
+
         ChartSeries series = new ChartSeries(rotulo);
 
-        series.set("1", Math.random() * 1000);
-        series.set("2", Math.random() * 1000);
-        series.set("3", Math.random() * 1000);
-        series.set("4", Math.random() * 1000);
-        series.set("5", Math.random() * 1000);
+        for (Date data : valoresPorData.keySet()) {
+            series.set(DATE_FORMAT.format(data), valoresPorData.get(data));
+        }
 
         this.model.addSeries(series);
     }
