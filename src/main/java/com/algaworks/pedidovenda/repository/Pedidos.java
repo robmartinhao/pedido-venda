@@ -1,5 +1,6 @@
 package com.algaworks.pedidovenda.repository;
 
+import com.algaworks.pedidovenda.model.Cliente;
 import com.algaworks.pedidovenda.model.Pedido;
 import com.algaworks.pedidovenda.model.Usuario;
 import com.algaworks.pedidovenda.model.vo.DataValor;
@@ -10,14 +11,12 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
-import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.type.Type;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -28,7 +27,6 @@ public class Pedidos implements Serializable {
     private EntityManager manager;
 
     public Map<Date, BigDecimal> valoresTotaisPorData(Integer numeroDeDias, Usuario criadoPor) {
-        Session session = manager.unwrap(Session.class);
 
         numeroDeDias -= 1;
 
@@ -38,26 +36,24 @@ public class Pedidos implements Serializable {
 
         Map<Date, BigDecimal> resultado = criarMapaVazio(numeroDeDias, dataInicial);
 
-        Criteria criteria = session.createCriteria(Pedido.class);
-
-        // select date(data_criacao) as data, sum(valor_total) as valor
-        // from pedido where data_criacao >= :dataInicial and vendedor_id = :criadoPor
-        // group by date(data_criacao)
-
-        criteria.setProjection(Projections.projectionList()
-                        .add(Projections.sqlGroupProjection("date(data_criacao) as data",
-                                "date(data_criacao)", new String[] { "data" },
-                                new Type[] { StandardBasicTypes.DATE } ))
-                        .add(Projections.sum("valorTotal").as("valor"))
-                )
-                .add(Restrictions.ge("dataCriacao", dataInicial.getTime()));
+        String jpql = "select new com.algaworks.pedidovenda.model.vo.DataValor(date(p.dataCriacao), sum(p.valorTotal)) " +
+                "from Pedido p where p.dataCriacao >= :dataInicial ";
 
         if (criadoPor != null) {
-            criteria.add(Restrictions.eq("vendedor", criadoPor));
+            jpql += "and p.vendedor = :vendedor ";
         }
 
-        List<DataValor> valoresPorData = criteria
-                .setResultTransformer(Transformers.aliasToBean(DataValor.class)).list();
+        jpql += "group by date(dataCriacao)";
+
+        TypedQuery<DataValor> query = manager.createQuery(jpql, DataValor.class);
+
+        query.setParameter("dataInicial", dataInicial.getTime());
+
+        if (criadoPor != null) {
+            query.setParameter("vendedor", criadoPor);
+        }
+
+        List<DataValor> valoresPorData = query.getResultList();
 
         for (DataValor dataValor : valoresPorData) {
             resultado.put(dataValor.getData(), dataValor.getValor());
@@ -79,49 +75,99 @@ public class Pedidos implements Serializable {
         return mapaInicial;
     }
 
-    public List<Pedido> filtrados(PedidoFilter filtro) {
-        Session session = this.manager.unwrap(Session.class);
-
-        Criteria criteria = session.createCriteria(Pedido.class)
-                // fazemos uma associação (join) com cliente e nomeamos como "c"
-                .createAlias("cliente", "c")
-                // fazemos uma associação (join) com vendedor e nomeamos como "v"
-                .createAlias("vendedor", "v");
+    private List<Predicate> criarPredicatesParaFiltro(PedidoFilter filtro, Root<Pedido> pedidoRoot,
+                                                      From<?, ?> clienteJoin, From<?,?> vendedorJoin) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        List<Predicate> predicates = new ArrayList<>();
 
         if (filtro.getNumeroDe() != null) {
-            // id deve ser maior ou igual (ge = greater or equals) a filtro.numeroDe
-            criteria.add(Restrictions.ge("id", filtro.getNumeroDe()));
+            predicates.add(builder.greaterThanOrEqualTo(pedidoRoot.get("id"), filtro.getNumeroDe()));
         }
-
         if (filtro.getNumeroAte() != null) {
-            // id deve ser menor ou igual (le = lower or equal) a filtro.numeroAte
-            criteria.add(Restrictions.le("id", filtro.getNumeroAte()));
+            predicates.add(builder.lessThanOrEqualTo(pedidoRoot.get("id"), filtro.getNumeroAte()));
         }
-
         if (filtro.getDataCriacaoDe() != null) {
-            criteria.add(Restrictions.ge("dataCriacao", filtro.getDataCriacaoDe()));
+            predicates.add(builder.greaterThanOrEqualTo(pedidoRoot.get("dataCriacao"), filtro.getDataCriacaoDe()));
         }
 
         if (filtro.getDataCriacaoAte() != null) {
-            criteria.add(Restrictions.le("dataCriacao", filtro.getDataCriacaoAte()));
+            predicates.add(builder.lessThanOrEqualTo(pedidoRoot.get("dataCriacao"), filtro.getDataCriacaoAte()));
         }
 
         if (StringUtils.isNotBlank(filtro.getNomeCliente())) {
-            // acessamos o nome do cliente associado ao pedido pelo alias "c", criado anteriormente
-            criteria.add(Restrictions.ilike("c.nome", filtro.getNomeCliente(), MatchMode.ANYWHERE));
+            predicates.add(builder.like(clienteJoin.get("nome"), "%" + filtro.getNomeCliente() + "%"));
         }
 
         if (StringUtils.isNotBlank(filtro.getNomeVendedor())) {
-            // acessamos o nome do vendedor associado ao pedido pelo alias "v", criado anteriormente
-            criteria.add(Restrictions.ilike("v.nome", filtro.getNomeVendedor(), MatchMode.ANYWHERE));
+            predicates.add(builder.like(vendedorJoin.get("nome"), "%" + filtro.getNomeVendedor() + "%"));
         }
 
         if (filtro.getStatuses() != null && filtro.getStatuses().length > 0) {
-            // adicionamos uma restrição "in", passando um array de constantes da enum StatusPedido
-            criteria.add(Restrictions.in("status", filtro.getStatuses()));
+            predicates.add(pedidoRoot.get("status").in(Arrays.asList(filtro.getStatuses())));
         }
 
-        return criteria.addOrder(Order.asc("id")).list();
+        return predicates;
+    }
+
+    public List<Pedido> filtrados(PedidoFilter filtro) {
+        From<?, ?> orderByFromEntity = null;
+
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = builder.createQuery(Pedido.class);
+
+        Root<Pedido> pedidoRoot = criteriaQuery.from(Pedido.class);
+        From<?, ?> clienteJoin = (From<?, ?>) pedidoRoot.fetch("cliente", JoinType.INNER);
+        From<?, ?> vendedorJoin = (From<?, ?>) pedidoRoot.fetch("vendedor", JoinType.INNER);
+
+        List<Predicate> predicates = criarPredicatesParaFiltro(filtro, pedidoRoot, clienteJoin, vendedorJoin);
+
+        criteriaQuery.select(pedidoRoot);
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+
+        if (filtro.getPropriedadeOrdenacao() != null) {
+            String nomePropriedadeOrdenacao = filtro.getPropriedadeOrdenacao();
+            orderByFromEntity = pedidoRoot;
+
+            if (filtro.getPropriedadeOrdenacao().contains(".")) {
+                nomePropriedadeOrdenacao = nomePropriedadeOrdenacao.substring(
+                        filtro.getPropriedadeOrdenacao().indexOf(".") + 1);
+            }
+
+            if (filtro.getPropriedadeOrdenacao().startsWith("cliente.")) {
+                orderByFromEntity = clienteJoin;
+            }
+
+            if (filtro.isAscendente() && filtro.getPropriedadeOrdenacao() != null) {
+                criteriaQuery.orderBy(builder.asc(orderByFromEntity.get(nomePropriedadeOrdenacao)));
+            } else if (filtro.getPropriedadeOrdenacao() != null) {
+                criteriaQuery.orderBy(builder.desc(orderByFromEntity.get(nomePropriedadeOrdenacao)));
+            }
+        }
+
+        TypedQuery<Pedido> query = manager.createQuery(criteriaQuery);
+
+        query.setFirstResult(filtro.getPrimeiroRegistro());
+        query.setMaxResults(filtro.getQuantidadeRegistros());
+
+        return query.getResultList();
+    }
+
+    public int quantidadeFiltrados(PedidoFilter filtro) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+
+        Root<Pedido> pedidoRoot = criteriaQuery.from(Pedido.class);
+        Join<Pedido, Cliente> clienteJoin = pedidoRoot.join("cliente", JoinType.INNER);
+        Join<Pedido, Cliente> vendedorJoin = pedidoRoot.join("vendedor", JoinType.INNER);
+
+        List<Predicate> predicates = criarPredicatesParaFiltro(filtro, pedidoRoot, clienteJoin, vendedorJoin);
+
+        criteriaQuery.select(builder.count(pedidoRoot));
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+
+        TypedQuery<Long> query = manager.createQuery(criteriaQuery);
+
+        return query.getSingleResult().intValue();
     }
 
     public Pedido guardar(Pedido pedido) {
