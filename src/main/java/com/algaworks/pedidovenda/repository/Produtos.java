@@ -1,5 +1,6 @@
 package com.algaworks.pedidovenda.repository;
 
+import com.algaworks.pedidovenda.model.Categoria;
 import com.algaworks.pedidovenda.model.Produto;
 import com.algaworks.pedidovenda.repository.filter.ProdutoFilter;
 import com.algaworks.pedidovenda.service.NegocioException;
@@ -15,7 +16,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Produtos implements Serializable {
@@ -47,20 +51,31 @@ public class Produtos implements Serializable {
             return null;
         }
     }
-
     public List<Produto> filtrados(ProdutoFilter filtro) {
-        Session session = manager.unwrap(Session.class);
-        Criteria criteria = session.createCriteria(Produto.class);
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Produto> query = builder.createQuery(Produto.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        Root<Produto> produtoRoot = query.from(Produto.class);
+        Fetch<Produto, Categoria> categoriaJoin = produtoRoot.fetch("categoria", JoinType.INNER);
+        categoriaJoin.fetch("categoriaPai", JoinType.INNER);
 
         if (StringUtils.isNotBlank(filtro.getSku())) {
-            criteria.add(Restrictions.eq("sku", filtro.getSku()));
+            predicates.add(builder.equal(produtoRoot.get("sku"), filtro.getSku()));
         }
 
         if (StringUtils.isNotBlank(filtro.getNome())) {
-            criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+            predicates.add(builder.like(builder.lower(produtoRoot.get("nome")),
+                    "%" + filtro.getNome().toLowerCase() + "%"));
         }
 
-        return criteria.addOrder(Order.asc("nome")).list();
+        query.select(produtoRoot);
+        query.where(predicates.toArray(new Predicate[0]));
+        query.orderBy(builder.asc(produtoRoot.get("nome")));
+
+        TypedQuery<Produto> typedQuery = manager.createQuery(query);
+        return typedQuery.getResultList();
     }
 
     public Produto porId(Long id) {
