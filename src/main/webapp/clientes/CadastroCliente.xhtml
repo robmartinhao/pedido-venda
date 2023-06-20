@@ -12,6 +12,7 @@
 
         <f:metadata>
             <o:viewParam name="cliente" value="#{cadastroClienteBean.cliente}"/>
+            <f:event type="preRenderView" listener="#{cadastroClienteBean.inicializar}" />
         </f:metadata>
 
         <h:form id="frmCliente">

@@ -3,7 +3,6 @@ package com.algaworks.pedidovenda.controller;
 import com.algaworks.pedidovenda.model.Cliente;
 import com.algaworks.pedidovenda.model.Endereco;
 import com.algaworks.pedidovenda.model.TipoPessoa;
-import com.algaworks.pedidovenda.repository.Clientes;
 import com.algaworks.pedidovenda.service.CadastroClienteService;
 import com.algaworks.pedidovenda.util.jsf.FacesUtil;
 
@@ -26,6 +25,12 @@ public class CadastroClienteBean implements Serializable {
     public CadastroClienteBean() {
         this.cliente = new Cliente();
         this.endereco = new Endereco();
+    }
+
+    public void inicializar() {
+        if (this.cliente == null) {
+            limpar();
+        }
     }
 
     public TipoPessoa[] getTiposPessoa() {

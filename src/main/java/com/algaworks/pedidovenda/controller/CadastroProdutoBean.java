@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Named
@@ -28,12 +29,14 @@ public class CadastroProdutoBean implements Serializable {
     private List<Categoria> subcategorias;
 
     public void inicializar() {
-        System.out.println("Inicializando...");
-        if(FacesUtil.isNotPostback()) {
-            categoriasRaizes = categorias.raizes();
-            if (this.categoriaPai != null) {
-                carregarSubcategorias();
-            }
+        if (this.produto == null) {
+            limpar();
+        }
+
+        categoriasRaizes = categorias.raizes();
+
+        if (this.categoriaPai != null) {
+            carregarSubcategorias();
         }
     }
 
@@ -48,7 +51,7 @@ public class CadastroProdutoBean implements Serializable {
     private void limpar() {
         produto = new Produto();
         categoriaPai = null;
-        subcategorias = null;
+        subcategorias = new ArrayList<>();
     }
 
     public void salvar() {

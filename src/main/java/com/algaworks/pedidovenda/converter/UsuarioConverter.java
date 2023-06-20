@@ -5,26 +5,24 @@ import com.algaworks.pedidovenda.model.Usuario;
 import com.algaworks.pedidovenda.repository.Produtos;
 import com.algaworks.pedidovenda.repository.Usuarios;
 import com.algaworks.pedidovenda.util.cdi.CDIServiceLocator;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.inject.Inject;
 
 @FacesConverter(forClass = Usuario.class)
 public class UsuarioConverter implements Converter {
 
-    //@Inject
+    @Inject
     private Usuarios usuarios;
-
-    public UsuarioConverter() {
-        this.usuarios = CDIServiceLocator.getBean(Usuarios.class);
-    }
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
         Usuario retorno = null;
-        if (s != null) {
+        if (StringUtils.isNotEmpty(s)) {
             Long id = Long.valueOf(s);
             retorno = usuarios.porId(id);
         }

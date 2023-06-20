@@ -28,10 +28,10 @@ public class CadastroUsuarioBean implements Serializable {
     private List<Grupo> grupoList = new ArrayList<>();
 
     public void inicializar() {
-        System.out.println("Inicializando...");
-        if (FacesUtil.isNotPostback()) {
-            this.grupoList = grupos.todos();
+        if (this.usuario == null) {
+            limpar();
         }
+        this.grupoList = grupos.todos();
     }
 
     public CadastroUsuarioBean() {

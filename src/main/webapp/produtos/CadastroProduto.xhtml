@@ -6,17 +6,17 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:o="http://omnifaces.org/ui">
 
-    <ui:define name="titulo">#{cadastroProdutoBean.isEditando() ? 'Edição de produto' : 'Novo produto'}</ui:define>
+    <ui:define name="titulo">#{cadastroProdutoBean.editando ? 'Edição de produto' : 'Novo produto'}</ui:define>
 
     <ui:define name="corpo">
         
         <f:metadata>
             <o:viewParam name="produto" value="#{cadastroProdutoBean.produto}"/>
-            <f:event type="preRenderView" listener="#{cadastroProdutoBean.inicializar()}" />
+            <f:event type="preRenderView" listener="#{cadastroProdutoBean.inicializar}" />
         </f:metadata>
         
         <h:form>
-            <h1>#{cadastroProdutoBean.isEditando() ? 'Edição de produto' : 'Novo produto'}</h1>
+            <h1>#{cadastroProdutoBean.editando ? 'Edição de produto' : 'Novo produto'}</h1>
 
             <p:messages autoUpdate="true" closable="true" />
 

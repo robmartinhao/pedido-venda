@@ -2,27 +2,24 @@ package com.algaworks.pedidovenda.converter;
 
 import com.algaworks.pedidovenda.model.Produto;
 import com.algaworks.pedidovenda.repository.Produtos;
-import com.algaworks.pedidovenda.util.cdi.CDIServiceLocator;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.inject.Inject;
 
 @FacesConverter(forClass = Produto.class)
 public class ProdutoConverter implements Converter {
 
-    //@Inject
+    @Inject
     private Produtos produtos;
-
-    public ProdutoConverter() {
-        this.produtos = CDIServiceLocator.getBean(Produtos.class);
-    }
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
         Produto retorno = null;
-        if (s != null) {
+        if (StringUtils.isNotEmpty(s)) {
             Long id = Long.valueOf(s);
             retorno = produtos.porId(id);
         }

@@ -48,11 +48,12 @@ public class CadastroPedidoBean implements Serializable {
     }
 
     public void inicializar() {
-        if (FacesUtil.isNotPostback()) {
-            this.vendedores = this.usuarios.vendedores();
-            this.pedido.adicionaItemVazio();
-            this.recalcularPedido();
+        if (this.pedido == null) {
+            limpar();
         }
+        this.vendedores = this.usuarios.vendedores();
+        this.pedido.adicionaItemVazio();
+        this.recalcularPedido();
     }
 
     public void pedidoAlterado(@Observes PedidoAlteradoEvent event) {
